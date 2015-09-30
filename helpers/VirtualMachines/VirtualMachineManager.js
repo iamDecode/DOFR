@@ -1,15 +1,25 @@
-var VirtualMachine = require("./VirtualMachine");
+var Obj = require('../Obj'),
+	VirtualMachine = require("VirtualMachine");
 
-function VirtualMachineManager() {
-    /**
-     * Start a new virtual machine returns.
-     */
-    function startVM() {
-        return new VirtualMachine();
-    }
-    function stopVM(virtualMachine) {
-    }
+/**
+ * Class to manage virtual machines
+ */
+var VirtualMachineManager = Obj.extend({
+	/**
+	 * Start a new VM
+	 * @return {VirtualMachine} The started VM
+	 */
+	startVM: function(){
+		return new VirtualMachine();
+	},
 
-}
+	/**
+	 * Stop a certain VM
+	 * @return {Boolean}
+	 */
+	stopVM: function(){
+		throw "Not implemented";
+	}
+});
 
 module.exports = VirtualMachineManager;

@@ -1,8 +1,11 @@
-var debug = require("debug")("DOFR:DOFR");
+var debug = require("debug")("DOFR:DOFR"),
+	Obj = require('./Obj');
 
-var DOFR = function() {
-    debug("YEAHH");
-    console.log("FUCK YEAH");
-}
+var DOFR = Obj.extend({
+	init: function(){
+	    debug("YEAHH");
+	    console.log("FUCK YEAH");
+	}
+});
 
 module.exports = DOFR;
