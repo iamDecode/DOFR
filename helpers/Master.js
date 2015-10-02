@@ -14,7 +14,7 @@ var Master = Obj.extend({
     init: function(){
         debug("Master created");
 
-        //Set up a timer to clean virtual machines (from for example Redis) every 10 seconds
+        //Set up a timer to clean (dead) virtual machines every 10 seconds
         setInterval(this.cleanUp, 1000 * 10);
 
         //Create task scheduler

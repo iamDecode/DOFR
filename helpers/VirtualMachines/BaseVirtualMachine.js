@@ -31,6 +31,9 @@ var BaseVirtualMachine = Obj.extend({
 		var multi = redis.multi();
 		multi.lrem("dofr_vm_list", 0, this.uuid); //remove from vm list
 		multi.del(this.uuid + "_heartbeat"); //remove heartbeat
+
+		//TODO: clean Kue and re-schedule tasks
+
 		return multi.execAsync();
 	},
 
