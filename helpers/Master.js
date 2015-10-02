@@ -1,6 +1,7 @@
 var debug = require("debug")("DOFR:Master"),
     Obj = require("./Obj"),
     VirtualMachineManager = require("./VirtualMachines/VirtualMachineManager"),
+    TaskScheduler = require("./Schedulers/BaseTaskScheduler"),
     kue = require("kue").createQueue();
 
 /**
@@ -8,11 +9,16 @@ var debug = require("debug")("DOFR:Master"),
  * @type {Function}
  */
 var Master = Obj.extend({
+    taskScheduler: null,
+
     init: function(){
         debug("Master created");
 
         //Set up a timer to clean virtual machines (from for example Redis) every 10 seconds
         setInterval(this.cleanUp, 1000 * 10);
+
+        //Create task scheduler
+        this.taskScheduler = new TaskScheduler();
 
         //Create some VMs
         var newVMs = [];
@@ -21,11 +27,12 @@ var Master = Obj.extend({
         }
         Promise.all(newVMs).then(function(created) {
             debug("Created vms: " + created.length);
-
-            kue.create("jobs/" + created[0].uuid, {
-                imageUrl: "some image url"
-            }).removeOnComplete(true).save();
         });
+
+        //For testing, generate tasks every second
+        setInterval(function() {
+
+        }, 1000);
     },
 
     /**

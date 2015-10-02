@@ -1,5 +1,5 @@
 var Obj = require('../Obj'),
-	VirtualMachine = require("./VirtualMachine"),
+	VirtualMachine = require("./BaseVirtualMachine"),
 	kue = require("kue").createQueue();
 
 var portIncrement = 1;

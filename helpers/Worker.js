@@ -1,7 +1,7 @@
 var debug = require("debug")("DOFR:Worker"),
     Obj = require('./Obj'),
     redis = require("./Redis"),
-    VirtualMachine = require("./VirtualMachines/VirtualMachine"),
+    VirtualMachine = require("./VirtualMachines/BaseVirtualMachine"),
     kue = require("kue").createQueue();
 
 /**
