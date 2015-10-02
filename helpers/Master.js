@@ -14,21 +14,17 @@ var Master = Obj.extend({
         //Set up a timer to clean virtual machines (from for example Redis) every 10 seconds
         setInterval(this.cleanUp, 1000 * 10);
 
-        //Set up some VMs
-        Promise.all([VirtualMachineManager.createVM(), VirtualMachineManager.createVM()]).then(function(created) {
+        //Create some VMs
+        var newVMs = [];
+        for(var i = 0; i < 2; i++) {
+            newVMs.push(VirtualMachineManager.createVM());
+        }
+        Promise.all(newVMs).then(function(created) {
             debug("Created vms: " + created.length);
 
             kue.create("jobs/" + created[0].uuid, {
                 imageUrl: "some image url"
             }).removeOnComplete(true).save();
-
-            VirtualMachineManager.count().then(function(count) {
-                debug(count);
-            });
-
-            VirtualMachineManager.getVMs().then(function(vms) {
-                debug(vms);
-            });
         });
     },
 
