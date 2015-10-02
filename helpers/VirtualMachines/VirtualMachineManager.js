@@ -9,17 +9,11 @@ var Obj = require('../Obj'),
 var VirtualMachineManager = {
 	createVM: function() {
 		var vm = new VirtualMachine();
-
-		var multi = redis.multi();
-		multi.rpush("dofr_vm_list", vm.uuid);
-		return multi.execAsync().then(vm.start.bind(vm));
+		return vm.start();
 	},
 
 	terminateVM: function(vm) {
-		var multi = redis.multi();
-		multi.lrem("dofr_vm_list", 0, vm.uuid);
-		vm.cleanHeartbeat();
-		return multi.execAsync().then();
+		return vm.stop();
 	},
 
 	/**

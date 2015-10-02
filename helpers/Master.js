@@ -42,22 +42,17 @@ var Master = Obj.extend({
         VirtualMachineManager.getVMs().then(function(results) {
             results.forEach(function(vm) {
                 var currentTime = (new Date()).getTime();
-
-                function remove(vm) {
-                    VirtualMachineManager.terminateVM(vm).then(function() {
-                        debug("Cleaned up: " + vm.uuid);
-                    });
-                }
-
                 vm.lastHeartbeat().then(function(heartbeatTime) {
                     //If vm has not sent a heartbeat in the last ten seconds, consider it dead
                     if (currentTime - heartbeatTime > 1000 * 10)
-                        remove(vm);
+                        VirtualMachineManager.terminateVM(vm).then(function() {
+                            debug("Cleaned up: " + vm.uuid);
+                        });
                 });
             });
         });
 
-        debug("Cleaned up Redis");
+        debug("Cleaned up dead stuff");
     }
 });
 

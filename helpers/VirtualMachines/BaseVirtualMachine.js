@@ -15,12 +15,23 @@ var BaseVirtualMachine = Obj.extend({
 			this.uuid = uuid.v4();
 	},
 
+	/**
+	 * Starts a new virtual machine. Make sure to call the base class when overriding.
+	 * @returns {*}
+	 */
 	start: function() {
-		throw "Not implemented";	
+		return redis.rpushAsync("dofr_vm_list", this.uuid);
 	},
 
+	/**
+	 * Stops a virtual machine. Make sure to call the base class when overriding.
+	 * @returns {*}
+	 */
 	stop: function() {
-		throw "Not implemented";
+		var multi = redis.multi();
+		multi.lrem("dofr_vm_list", 0, this.uuid); //remove from vm list
+		multi.del(this.uuid + "_heartbeat"); //remove heartbeat
+		return multi.execAsync();
 	},
 
 	/**
@@ -39,12 +50,6 @@ var BaseVirtualMachine = Obj.extend({
 	 */
 	lastHeartbeat: function() {
 		return redis.getAsync(this.uuid + "_heartbeat");
-	},
-	/**
-	 * Remove the heartbeat key from redis.
-	 */
-	cleanHeartbeat: function() {
-		redis.del(this.uuid + "_heartbeat");
 	}
 });
 
