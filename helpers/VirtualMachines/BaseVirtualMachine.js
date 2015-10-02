@@ -1,4 +1,4 @@
-var debug = require("debug")("DOFR:VirtualMachine"),
+var debug = require("debug")("DOFR:BaseVirtualMachine"),
 	Obj = require("../Obj"),
 	uuid = require("node-uuid"),
 	redis = require("../Redis");
@@ -6,7 +6,7 @@ var debug = require("debug")("DOFR:VirtualMachine"),
 /**
  * Abstract virtual machine class
  */
-var VirtualMachine = Obj.extend({
+var BaseVirtualMachine = Obj.extend({
 	uuid: null,
 
 	init: function(argUuid) {
@@ -48,4 +48,4 @@ var VirtualMachine = Obj.extend({
 	}
 });
 
-module.exports = VirtualMachine;
+module.exports = BaseVirtualMachine;

@@ -1,5 +1,5 @@
 var Obj = require('../Obj'),
-	VirtualMachine = require("./BaseVirtualMachine"),
+	BaseVirtualMachine = require("./BaseVirtualMachine"),
 	kue = require("kue").createQueue();
 
 var portIncrement = 1;
@@ -7,7 +7,7 @@ var portIncrement = 1;
 /**
  * Mock VirtualMachine implementation for testing
  */
-var ForkVM = Obj.extend(VirtualMachine, {
+var ForkVM = Obj.extend(BaseVirtualMachine, {
 	start: function() {
 		var script = process.argv[1];
 		var args = [];
