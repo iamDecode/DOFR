@@ -23,14 +23,28 @@ var VirtualMachine = Obj.extend({
 		throw "Not implemented";
 	},
 
+	/**
+	 * Send a new heartbeat.
+	 * @returns {*}
+	 */
 	sendHeartbeat: function() {
 		var timeInMilliseconds = (new Date()).getTime();
 		return redis.setAsync(this.uuid + "_heartbeat", timeInMilliseconds).then(function() {
 			debug(this.uuid + " sent a heartbeat: " + timeInMilliseconds);
 		}.bind(this));
 	},
+	/**
+	 * Get the last sent heartbeat.
+	 * @returns {*}
+	 */
 	lastHeartbeat: function() {
 		return redis.getAsync(this.uuid + "_heartbeat");
+	},
+	/**
+	 * Remove the heartbeat key from redis.
+	 */
+	cleanHeartbeat: function() {
+		redis.del(this.uuid + "_heartbeat");
 	}
 });
 

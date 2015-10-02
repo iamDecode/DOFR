@@ -4,26 +4,22 @@ var Obj = require('../Obj'),
 	Promise = require("bluebird");
 
 /**
- * Class to manage virtual machines. It should be stateless so that any VM can take over the manager duty.
+ * Global class to manage virtual machines. It should be stateless so that any VM can take over the manager duty.
  */
 var VirtualMachineManager = {
 	createVM: function() {
-		return new Promise(function(resolve, reject) {
-			var vm = new VirtualMachine();
+		var vm = new VirtualMachine();
 
-			var multi = redis.multi();
-			multi.rpush("dofr_vm_list", vm.uuid);
-			multi.exec(function(err, res) {
-				if(err)
-					return reject();
-
-				return resolve(vm.start());
-			});
-		});
+		var multi = redis.multi();
+		multi.rpush("dofr_vm_list", vm.uuid);
+		return multi.execAsync().then(vm.start.bind(vm));
 	},
 
 	terminateVM: function(vm) {
-		throw "Not implemented";
+		var multi = redis.multi();
+		multi.lrem("dofr_vm_list", 0, vm.uuid);
+		vm.cleanHeartbeat();
+		return multi.execAsync().then();
 	},
 
 	/**
@@ -34,7 +30,11 @@ var VirtualMachineManager = {
 	},
 
 	getVMs: function() {
-		return redis.lrangeAsync("dofr_vm_list", 0, -1);
+		return redis.lrangeAsync("dofr_vm_list", 0, -1).then(function(listOfUuids) {
+			return listOfUuids.map(function(uuid) {
+				return new VirtualMachine(uuid);
+			});
+		});
 	}
 };
 
