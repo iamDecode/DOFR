@@ -1,6 +1,5 @@
 var Obj = require('../Obj'),
 	VirtualMachine = require("./VirtualMachine"),
-	uuid = require("node-uuid"),
 	kue = require("kue").createQueue();
 
 var portIncrement = 1;
@@ -9,10 +8,6 @@ var portIncrement = 1;
  * Mock VirtualMachine implementation for testing
  */
 var ForkVM = Obj.extend(VirtualMachine, {
-	init: function() {
-		this.uuid = uuid.v4();
-	},
-
 	start: function() {
 		var script = process.argv[1];
 		var args = [];

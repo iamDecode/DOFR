@@ -1,22 +1,17 @@
 var Obj = require('../Obj'),
 	VirtualMachine = require("./ForkVM"),
-	redis = require("redis"),
+	redis = require("../Redis"),
 	Promise = require("bluebird");
-
-Promise.promisifyAll(redis.RedisClient.prototype);
-Promise.promisifyAll(redis.Multi.prototype);
-
-var client = redis.createClient();
 
 /**
  * Class to manage virtual machines. It should be stateless so that any VM can take over the manager duty.
  */
-var VirtualMachineManager = Obj.extend({
+var VirtualMachineManager = {
 	createVM: function() {
 		return new Promise(function(resolve, reject) {
 			var vm = new VirtualMachine();
 
-			var multi = client.multi();
+			var multi = redis.multi();
 			multi.rpush("dofr_vm_list", vm.uuid);
 			multi.exec(function(err, res) {
 				if(err)
@@ -35,12 +30,12 @@ var VirtualMachineManager = Obj.extend({
 	 * Count the number of active VMs.
 	 */
 	count: function() {
-		return client.llenAsync("dofr_vm_list");
+		return redis.llenAsync("dofr_vm_list");
 	},
 
 	getVMs: function() {
-		return client.lrangeAsync("dofr_vm_list", 0, -1);
+		return redis.lrangeAsync("dofr_vm_list", 0, -1);
 	}
-});
+};
 
 module.exports = VirtualMachineManager;
