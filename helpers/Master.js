@@ -1,7 +1,7 @@
 var debug = require("debug")("DOFR:Master"),
     Obj = require("./Obj"),
     VirtualMachineManager = require("./VirtualMachines/VirtualMachineManager"),
-    TaskScheduler = require("./Schedulers/BaseTaskScheduler"),
+    TaskScheduler = require("./Schedulers/RandomScheduler"),
     kue = require("kue").createQueue();
 
 /**
@@ -31,8 +31,10 @@ var Master = Obj.extend({
 
         //For testing, generate tasks every second
         setInterval(function() {
-
-        }, 1000);
+            this.taskScheduler.schedule({
+                imageUrl: "Some image's url..."
+            });
+        }.bind(this), 1000);
     },
 
     /**
