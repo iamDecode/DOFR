@@ -1,8 +1,6 @@
 var debug = require("debug")("DOFR:Worker"),
     Obj = require('./Obj'),
-    kue = require("kue");
-
-var queue = kue.createQueue();
+    kue = require("kue").createQueue();
 
 /**
  * A worker needs the following environment variables to function properly:
@@ -15,7 +13,7 @@ var Worker = Obj.extend({
     init: function() {
         this.uuid = process.env.DOFR_WORKER_UUID;
 
-        queue.process("jobs/" + this.uuid, function(job, done){
+        kue.process("jobs/" + this.uuid, function(job, done){
             debug("Worker doing work: " + this.uuid);
             debug("Worker done: " + job.data.imageUrl);
             done();

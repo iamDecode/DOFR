@@ -1,20 +1,28 @@
 var debug = require("debug")("DOFR:Master"),
     Obj = require("./Obj"),
-    ForkVM = require("./VirtualMachines/ForkVM"),
-    kue = require("kue");
-
-var queue = kue.createQueue();
+    VirtualMachineManager = require("./VirtualMachines/VirtualMachineManager"),
+    kue = require("kue").createQueue();
 
 var Master = Obj.extend({
     init: function(){
         debug("Master created");
 
-        var vm = new ForkVM();
-        vm.start();
+        var vmm = new VirtualMachineManager();
+        Promise.all([vmm.createVM(), vmm.createVM()]).then(function(created) {
+            debug("Created vms: " + created.length);
 
-        queue.create("jobs/" + vm.uuid, {
-            imageUrl: "some image url"
-        }).removeOnComplete(true).save();
+            kue.create("jobs/" + created[0].uuid, {
+                imageUrl: "some image url"
+            }).removeOnComplete(true).save();
+
+            vmm.count().then(function(count) {
+                debug(count);
+            });
+
+            vmm.getVMs().then(function(vms) {
+                debug(vms);
+            });
+        });
     }
 });
 
