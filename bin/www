@@ -89,5 +89,5 @@ function onListening() {
   debug('Listening on ' + bind);
 }
 
-var dofr = require("../helpers/DOFR");
+var dofr = require("../lib/DOFR");
 new dofr();
