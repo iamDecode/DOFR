@@ -17,6 +17,7 @@
     "redis": "*",
     "kue": "*",
     "node-uuid": "*",
-    "bluebird": "*"
+    "bluebird": "*",
+    "opencv": "*"
   }
 }
