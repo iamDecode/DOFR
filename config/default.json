@@ -3,6 +3,11 @@
 		"timeout": 10000,
 		"interval": 10000
 	},
-	"portIncrement": 1,
-  	"startUpPeriod": 60000
+	"vm": {
+	  	"startUpPeriod": 60000
+  	},
+  	"queue": {
+  		"maxSize": 25,
+  		"minSize": 10
+  	}
 }
