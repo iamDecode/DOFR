@@ -9,6 +9,6 @@
   	"queue": {
   		"maxSize": 25,
   		"minSize": 10,
-  		"actionDeviation": 10
+  		"actionDeviation": 20
   	}
 }
