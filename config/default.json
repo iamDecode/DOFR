@@ -8,6 +8,8 @@
   	},
   	"queue": {
   		"maxSize": 25,
-  		"minSize": 10
+  		"minSize": 10,
+  		"minDeviation": 20, //higher than maxSize!
+  		"maxDeviation": 35 //higher than maxSize!
   	}
 }
