@@ -25,6 +25,7 @@
     "redis": "~2.1.0",
     "request": "^2.64.0",
     "serve-favicon": "~2.3.0",
-    "tough-cookie": "^2.1.0"
+    "tough-cookie": "^2.1.0",
+    "ec2-instance-data": "^0.4.1"
   }
 }

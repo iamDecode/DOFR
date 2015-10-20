@@ -3,7 +3,8 @@
 var debug = require("debug")("DOFR:DOFR"),
   Obj = require("./lib/helpers/Obj"),
   Worker = require("./lib/instances/Worker"),
-  Master = require("./lib/instances/Master");
+  Master = require("./lib/instances/Master"),
+  VirtualMachineManager = require("./lib/VirtualMachines/VirtualMachineManager");
 
 /**
  * Main program. Becomes a worker or master based off environment.
@@ -13,12 +14,12 @@ var debug = require("debug")("DOFR:DOFR"),
  */
 var DOFR = Obj.extend({
   init: function() {
-    var processType = process.env.DOFR_PROCESS_TYPE;
-
-    if (processType === "worker")
-      new Worker();
-    else
-      new Master();
+    VirtualMachineManager.getProcessType(this).then(function(processType) {
+      if (processType === "worker")
+        new Worker();
+      else
+        new Master();
+    });
   }
 });
 
