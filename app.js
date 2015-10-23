@@ -1,6 +1,7 @@
 'use strict';
 
 var debug = require("debug")("DOFR:DOFR"),
+    Promise = require("bluebird"),
     Obj = require("./lib/helpers/Obj"),
     Worker = require("./lib/instances/Worker"),
     Master = require("./lib/instances/Master"),
@@ -16,9 +17,13 @@ var debug = require("debug")("DOFR:DOFR"),
 var DOFR = Obj.extend({
     init: function () {
         InstanceData.dofr_initialise().then(function () {
-            VirtualMachineManager.getProcessType(this).then(function (processType) {
-                if (processType === "worker")
-                    new Worker();
+            Promise.all([VirtualMachineManager.getUuid(), VirtualMachineManager.getProcessType()]).then(function(results) {
+                var uuid = results[0];
+                var processType = results[1];
+
+                if (processType === "worker") {
+                    new Worker(uuid);
+                }
                 else
                     new Master();
             });
